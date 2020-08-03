@@ -62,22 +62,34 @@ router.post("/join", (req, res) => {
   })();
 });
 
-router.post('/leave', (req, res) => {
-  try {
-    const {username, roomKey} = req.body;
-    if(username && roomKey) {
-      const newMembers = (await db.collection('rooms').doc(roomKey).get()).data().members;
-      newMembers.splice(newMembers.findIndex(username), 1);
-      await db.collection('rooms').doc(roomKey).set({members: newMembers}, {merge: true});
-      res.status(200).json({message: 'success!'});
+router.post("/leave", (req, res) => {
+  (async () => {
+    try {
+      const { username, roomKey } = req.body;
+      if (username && roomKey) {
+        const newMembers = (
+          await db.collection("rooms").doc(roomKey).get()
+        ).data().members;
+        if (newMembers.indexOf(username) >= 0) {
+          newMembers.splice(newMembers.indexOf(username), 1);
+          await db
+            .collection("rooms")
+            .doc(roomKey)
+            .set({ members: newMembers }, { merge: true });
+          res.status(200).json({ message: "success!" });
+        } else {
+          res.status(404).json({ message: "user not found" });
+        }
+      } else {
+        res.status(400).json({ message: "username/roomkey not provided" });
+      }
+    } catch (e) {
+      console.log(e);
+      res
+        .status(500)
+        .json({ message: "Internal server error occurred. Try again later." });
     }
-    else {
-      res.status(400).json({message: 'username/roomkey not provided'});
-    }
-  }
-  catch(e) {
-    res.status(500).json({message: 'Internal server error occurred. Try again later.'});
-  }
-  });
+  })();
+});
 
 module.exports = router;
