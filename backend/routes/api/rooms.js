@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
 const FirebaseAdmin = require("firebase-admin");
 const serviceAccount = require("../../ServiceAccountKey.json");
 
@@ -62,5 +61,23 @@ router.post("/join", (req, res) => {
     }
   })();
 });
+
+router.post('/leave', (req, res) => {
+  try {
+    const {username, roomKey} = req.body;
+    if(username && roomKey) {
+      const newMembers = (await db.collection('rooms').doc(roomKey).get()).data().members;
+      newMembers.splice(newMembers.findIndex(username), 1);
+      await db.collection('rooms').doc(roomKey).set({members: newMembers}, {merge: true});
+      res.status(200).json({message: 'success!'});
+    }
+    else {
+      res.status(400).json({message: 'username/roomkey not provided'});
+    }
+  }
+  catch(e) {
+    res.status(500).json({message: 'Internal server error occurred. Try again later.'});
+  }
+  });
 
 module.exports = router;
