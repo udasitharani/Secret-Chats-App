@@ -7,9 +7,14 @@ const serviceAccount = require("./ServiceAccountKey.json");
 FirebaseAdmin.initializeApp({
   credential: FirebaseAdmin.credential.cert(serviceAccount),
 });
+const db = FirebaseAdmin.firestore();
 
 app.get("/", (req, res) => {
-  res.send("hello world!");
+  db.collection("rooms")
+    .get()
+    .then((docs) => {
+      res.send(docs);
+    });
 });
 
 app.listen(PORT);
