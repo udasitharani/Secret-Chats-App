@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt");
 const FirebaseAdmin = require("firebase-admin");
 const serviceAccount = require("../../ServiceAccountKey.json");
 
-const saltRounds = 10;
-
 const router = express.Router();
 FirebaseAdmin.initializeApp({
   credential: FirebaseAdmin.credential.cert(serviceAccount),
@@ -13,68 +11,56 @@ const db = FirebaseAdmin.firestore();
 
 router.post("/create", (req, res) => {
   try {
-    if (req.body.username && req.body.roomKey && req.body.roomName) {
-      let roomKey = req.body.roomKey;
-      //   bcrypt.hash(req.body.roomKey, saltRounds, (err, hashedKey) => {
-      //     if (err) {
-      //       console.log(err);
-      //     } else {
-      //   roomKey = hashedKey;
-      db.collection("rooms").add({
-        members: [req.body.username],
+    const { roomName, username } = req.body;
+    if (username && roomName) {
+      const doc = db.collection("rooms").add({
+        roomName,
+        members: [username],
         messages: [],
-        roomKey: roomKey,
-        roomName: req.body.roomName,
       });
-      res.status(200).json({ status: 200, message: "success" });
-      // }
-      //   });
+      const roomKey = doc.id;
+      res.json({
+        message: "successfully added.",
+        roomKey: roomKey,
+      });
     } else {
       res.status(400).json({
-        status: 400,
         message: "username/roomKey/roomName not provided.",
       });
     }
   } catch (e) {
+    console.log(e);
     res.status(500).json({
-      status: 500,
       message: "internal server error occurred. try again.",
     });
   }
 });
 
 router.post("/join", (req, res) => {
-  console.log("first");
-  try {
-    if (req.body.username && req.body.roomKey) {
-      let roomKey = req.body.roomKey;
-      // bcrypt.hash(req.body.roomKey, saltRounds, (err, hashedKey) => {
-      //   if (err) {
-      //     console.log(err);
-      //   } else {
-      // roomKey = hashedKey;
-      console.log(roomKey);
-      let id;
-      let query = db.collection("rooms").where("roomKey", "==", roomKey);
-      query.get().then((querySnapshot) => {
-        querySnapshot.forEach((documentSnapshot) => {
-          id = documentSnapshot.id;
-        });
+  (async () => {
+    try {
+      const { username, roomKey } = req.body;
+      if (username && roomKey) {
+        const roomData = (
+          await db.collection("rooms").doc(roomKey).get()
+        ).data();
+
+        await db
+          .collection("rooms")
+          .doc(roomKey)
+          .set({ members: [...roomData.members, username] }, { merge: true });
+
+        res.json({ message: "success" });
+      } else {
+        res.status(400).json({ message: "roomKey/username not specified." });
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({
+        message: "Internal server error occurred. Try again.",
       });
-      res.status(200).json({ status: 200, message: "success" });
-      //   }
-      // });
-    } else {
-      res
-        .status(400)
-        .json({ status: 400, message: "roomKey/username not specified." });
     }
-  } catch (e) {
-    res.status(500).json({
-      status: 500,
-      message: "Internal server error occurred. Try again.",
-    });
-  }
+  })();
 });
 
 module.exports = router;

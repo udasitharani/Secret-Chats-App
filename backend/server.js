@@ -16,11 +16,13 @@ app.get("/", (req, res) => {
   res.send("I'm alive!");
 });
 
-const server = http.createServer(app);
-const io = socketIO(server);
+app.listen(PORT);
 
-io.on("connection", (socket) => {
-  console.log("connected to the socket!");
-});
+// const server = http.createServer(app);
+// const io = socketIO(server);
 
-server.listen(PORT);
+// io.on("connection", (socket) => {
+//   console.log("connected to the socket!");
+// });
+
+// server.listen(PORT);
