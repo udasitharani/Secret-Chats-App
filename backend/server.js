@@ -1,20 +1,22 @@
 const express = require("express");
-const app = express();
+const http = require("http");
+const socketIO = require("socket.io");
+const cors = require("cors");
+const body_parser = require("body-parser");
+const path = require("path");
 const PORT = process.env.PORT || 8080;
+const app = express();
+const roomsRouter = require(path.join(__dirname, "routes", "api", "rooms"));
 
-const FirebaseAdmin = require("firebase-admin");
-const serviceAccount = require("./ServiceAccountKey.json");
-FirebaseAdmin.initializeApp({
-  credential: FirebaseAdmin.credential.cert(serviceAccount),
-});
-const db = FirebaseAdmin.firestore();
+app.use(cors());
+app.use(body_parser.json());
+app.use("/api/chat-room", roomsRouter);
 
 app.get("/", (req, res) => {
-  db.collection("rooms")
-    .get()
-    .then((docs) => {
-      res.send(docs);
-    });
+  res.send("I'm alive!");
 });
 
-app.listen(PORT);
+const server = http.createServer(app);
+const io = socketIO(server);
+
+server.listen(PORT);
