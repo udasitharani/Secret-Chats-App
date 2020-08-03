@@ -43,13 +43,16 @@ router.post("/join", (req, res) => {
         const roomData = (
           await db.collection("rooms").doc(roomKey).get()
         ).data();
+        if (roomData.members.indexOf(username) == -1) {
+          await db
+            .collection("rooms")
+            .doc(roomKey)
+            .set({ members: [...roomData.members, username] }, { merge: true });
 
-        await db
-          .collection("rooms")
-          .doc(roomKey)
-          .set({ members: [...roomData.members, username] }, { merge: true });
-
-        res.json({ message: "success" });
+          res.json({ message: "success" });
+        } else {
+          res.status(400).json({ message: "duplicate username." });
+        }
       } else {
         res.status(400).json({ message: "roomKey/username not specified." });
       }
@@ -76,7 +79,7 @@ router.post("/leave", (req, res) => {
             .collection("rooms")
             .doc(roomKey)
             .set({ members: newMembers }, { merge: true });
-          res.status(200).json({ message: "success!" });
+          res.json({ message: "success!" });
         } else {
           res.status(404).json({ message: "user not found" });
         }
