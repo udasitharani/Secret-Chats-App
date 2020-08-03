@@ -44,23 +44,36 @@ router.post("/create", (req, res) => {
 });
 
 router.post("/join", (req, res) => {
-  if (req.body.username && req.body.roomKey) {
-    let roomKey = req.body.roomKey;
-    // bcrypt.hash(req.body.roomKey, saltRounds, (err, hashedKey) => {
-    //   if (err) {
-    //     console.log(err);
-    //   } else {
-    // roomKey = hashedKey;
-    console.log(req.body.roomKey, "--", roomKey);
-    let query = db.collection("rooms").where("roomKey", "==", roomKey);
-    query.get().then((querySnapshot) => {
-      querySnapshot.forEach((documentSnapshot) => {
-        console.log(documentSnapshot.data());
+  console.log("first");
+  try {
+    if (req.body.username && req.body.roomKey) {
+      let roomKey = req.body.roomKey;
+      // bcrypt.hash(req.body.roomKey, saltRounds, (err, hashedKey) => {
+      //   if (err) {
+      //     console.log(err);
+      //   } else {
+      // roomKey = hashedKey;
+      console.log(roomKey);
+      let id;
+      let query = db.collection("rooms").where("roomKey", "==", roomKey);
+      query.get().then((querySnapshot) => {
+        querySnapshot.forEach((documentSnapshot) => {
+          id = documentSnapshot.id;
+        });
       });
+      res.status(200).json({ status: 200, message: "success" });
+      //   }
+      // });
+    } else {
+      res
+        .status(400)
+        .json({ status: 400, message: "roomKey/username not specified." });
+    }
+  } catch (e) {
+    res.status(500).json({
+      status: 500,
+      message: "Internal server error occurred. Try again.",
     });
-    res.status(200).json({ status: 200, message: "success" });
-    //   }
-    // });
   }
 });
 

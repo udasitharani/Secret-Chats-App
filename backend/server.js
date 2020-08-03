@@ -19,4 +19,8 @@ app.get("/", (req, res) => {
 const server = http.createServer(app);
 const io = socketIO(server);
 
+io.on("connection", (socket) => {
+  console.log("connected to the socket!");
+});
+
 server.listen(PORT);
