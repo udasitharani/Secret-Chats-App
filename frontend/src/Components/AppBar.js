@@ -1,0 +1,24 @@
+import React from "react";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const AppHeader = (props) => {
+  const classes = useStyles();
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography className={classes.title} variant="h4">
+          Secrets
+        </Typography>
+      </Toolbar>
+    </AppBar>
+  );
+};
+
+const useStyles = makeStyles((theme) => ({
+  title: {
+    flexGrow: 1,
+  },
+}));
+
+export default AppHeader;
