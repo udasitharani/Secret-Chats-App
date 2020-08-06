@@ -7,6 +7,8 @@ import * as serviceWorker from "./serviceWorker";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import AppTheme from "./Themes/DefaultTheme";
 
+console.log(AppTheme);
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

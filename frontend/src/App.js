@@ -15,7 +15,7 @@ function App() {
         justify="flex-start"
         align-items="center"
       >
-        <div className="app-header" style={{ flex: "0 1 auto" }}>
+        <div className="app-header">
           <AppHeader></AppHeader>
         </div>
         <div className="app-body" style={{ flex: "1 1 auto" }}>
