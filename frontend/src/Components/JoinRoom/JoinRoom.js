@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import styles from "./JoinRoom.module.css";
+import { useHistory } from "react-router-dom";
 import { Grid, CircularProgress } from "@material-ui/core";
+import styles from "./JoinRoom.module.css";
 import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
 
-const CreateRoom = () => {
+const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
   const [roomkey, setroomkey] = useState("");
   const [cpiClasses, setCpiClasses] = useState("circularProgress");
@@ -14,6 +15,7 @@ const CreateRoom = () => {
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [SnackBarSeverity, setSnackBarSeverity] = useState("");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
+  let history = useHistory();
 
   useEffect(() => {
     if (inProgress) {
@@ -38,12 +40,20 @@ const CreateRoom = () => {
       });
       setInProgress(false);
       if (response.status === 200) {
-        setSnackBarMessage(
-          "Successfully joined '" +
-            (await response.json())["roomname"] +
-            "' chatroom."
-        );
-        setSnackBarSeverity("success");
+        const responseJSON = await response.json();
+        history.push({
+          pathname: "/chat-room",
+          state: {
+            snackBarSeverity: "success",
+            snackBarMessage:
+              "Successfully joined '" +
+              responseJSON["roomname"] +
+              "' chatroom.",
+            roomkey: responseJSON["roomkey"],
+            roomname: responseJSON["roomname"],
+            // setHeaderTitle: props.setHeaderTitle,
+          },
+        });
       } else if (
         response.status === 400 ||
         response.status === 404 ||

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import styles from "./CreateRoom.module.css";
+import { useHistory } from "react-router-dom";
 import { Grid, CircularProgress } from "@material-ui/core";
+import styles from "./CreateRoom.module.css";
 import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
 
-const CreateRoom = () => {
+const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
   const [roomname, setRoomname] = useState("");
   const [cpiClasses, setCpiClasses] = useState("circularProgress");
@@ -14,6 +15,7 @@ const CreateRoom = () => {
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [SnackBarSeverity, setSnackBarSeverity] = useState("");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
+  let history = useHistory();
 
   useEffect(() => {
     if (inProgress) {
@@ -42,15 +44,22 @@ const CreateRoom = () => {
       const responseJSON = await response.json();
       setInProgress(false);
       if (response.status === 200) {
-        setSnackBarMessage(
-          "Successfully created '" +
-            roomname +
-            "' chatroom. Room Key: '" +
-            responseJSON["roomkey"] +
-            "' has been copeid to your clipboard."
-        );
         await navigator.clipboard.writeText(responseJSON["roomkey"]);
-        setSnackBarSeverity("success");
+        history.push({
+          pathname: "/chat-room",
+          state: {
+            snackBarSeverity: "success",
+            snackBarMessage:
+              "Successfully created '" +
+              roomname +
+              "' chatroom. Room Key: '" +
+              responseJSON["roomkey"] +
+              "' has been copeid to your clipboard.",
+            roomkey: responseJSON["roomkey"],
+            roomname: roomname,
+            // setHeaderTitle: props.setHeaderTitle,
+          },
+        });
       } else if (response.status === 400) {
         setSnackBarMessage("User-Name/Room-Name not provided.");
         setSnackBarSeverity("error");
