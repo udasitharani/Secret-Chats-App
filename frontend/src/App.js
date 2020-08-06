@@ -4,8 +4,9 @@ import { Grid } from "@material-ui/core";
 import AppHeader from "./Components/AppBar";
 import "./App.css";
 import Home from "./Components/Home";
+import CreateRoom from "./Components/CreateRoom";
 
-function App() {
+const App = () => {
   return (
     <div style={{ height: "100vh" }} className="App">
       <Grid
@@ -20,12 +21,13 @@ function App() {
         </div>
         <div className="app-body" style={{ flex: "1 1 auto" }}>
           <Switch>
-            <Route to="/" component={Home} exact />
+            <Route path="/" component={Home} exact />
+            <Route path="/create-room" component={CreateRoom} />
           </Switch>
         </div>
       </Grid>
     </div>
   );
-}
+};
 
 export default App;

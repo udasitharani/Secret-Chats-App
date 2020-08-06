@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import PrimaryButton from "./PrimaryButton";
 
-const Home = (props) => {
+const Home = () => {
   return (
     <Grid
       style={{ height: "100%" }}
