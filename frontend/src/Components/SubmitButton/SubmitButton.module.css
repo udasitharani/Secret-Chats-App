@@ -1,0 +1,15 @@
+.submitButton {
+  align-self: flex-end;
+  margin-top: 20vh !important;
+  width: 25vw !important;
+  height: 8vh !important;
+}
+
+@media only screen and (min-width: 600px) {
+  .submitButton {
+    align-self: flex-end;
+    margin-top: 10vh !important;
+    width: 7vw !important;
+    height: 7vh !important;
+  }
+}

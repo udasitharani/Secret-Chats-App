@@ -1,0 +1,13 @@
+.inputField {
+  width: 100% !important;
+  height: 8vh !important;
+  margin: 5vh 0 !important;
+}
+
+@media only screen and (min-width: 600px) {
+  .inputField {
+    width: 100% !important;
+    height: 10vh !important;
+    margin: 2vh 0 !important;
+  }
+}

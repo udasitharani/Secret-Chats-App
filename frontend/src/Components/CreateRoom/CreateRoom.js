@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CreateRoom.module.css";
-import { Grid, TextField, Button, CircularProgress } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Grid, CircularProgress } from "@material-ui/core";
+import SnackBar from "../SnackBar/SnackBar";
+import InputField from "../InputField/InputField";
+import SubmitButton from "../SubmitButton/SubmitButton";
 
 const CreateRoom = () => {
   const [username, setUsername] = useState("");
   const [roomname, setRoomname] = useState("");
-  let [cpiClasses, setCpiClasses] = useState("circularProgress");
-  let [gridClasses, setGridClasses] = useState("grid");
+  const [cpiClasses, setCpiClasses] = useState("circularProgress");
+  const [gridClasses, setGridClasses] = useState("grid");
   const [inProgress, setInProgress] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
+  const [SnackBarSeverity, setSnackBarSeverity] = useState("");
+  const [SnackBarMessage, setSnackBarMessage] = useState("");
 
   useEffect(() => {
     if (inProgress) {
@@ -22,15 +27,42 @@ const CreateRoom = () => {
 
   const postCreateRoom = async () => {
     const data = { username, roomname };
-    setInProgress(true);
-    const response = await fetch("http://127.0.0.1:8080/api/chat-room/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    setInProgress(false);
+    if (username && roomname) {
+      setInProgress(true);
+      const response = await fetch(
+        "http://127.0.0.1:8080/api/chat-room/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      setInProgress(false);
+      if (response.status === 200) {
+        setSnackBarMessage("Successfully created '" + roomname + "' chatroom.");
+        setSnackBarSeverity("success");
+      } else if (response.status === 400) {
+        setSnackBarMessage("User-Name/Room-Name not provided.");
+        setSnackBarSeverity("error");
+      } else if (response.status === 500) {
+        setSnackBarMessage("Internal server error occurred. Please try again.");
+        setSnackBarSeverity("error");
+      }
+    } else {
+      if (!username && !roomname) {
+        setSnackBarMessage("Please provide username and roomname.");
+        setSnackBarSeverity("warning");
+      } else if (!username) {
+        setSnackBarMessage("Please provide User Name.");
+        setSnackBarSeverity("warning");
+      } else if (!roomname) {
+        setSnackBarMessage("Please provide Room Name.");
+        setSnackBarSeverity("warning");
+      }
+    }
+    setShowSnackBar(true);
   };
 
   return (
@@ -43,29 +75,24 @@ const CreateRoom = () => {
         justify="center"
         alignItems="center"
       >
-        <TextField
-          className={styles.inputField}
+        <InputField
           label="Your Name"
-          variant="outlined"
           value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          handleChange={(event) => setUsername(event.target.value)}
         />
-        <TextField
-          className={styles.inputField}
+        <InputField
           label="Room Name"
-          variant="outlined"
           value={roomname}
-          onChange={(event) => setRoomname(event.target.value)}
+          handleChange={(event) => setRoomname(event.target.value)}
         />
-        <Button
-          className={styles.submitButton}
-          variant="outlined"
-          color="secondary"
-          onClick={postCreateRoom}
-        >
-          Next
-        </Button>
+        <SubmitButton onClick={postCreateRoom} label="Next" />
       </Grid>
+      <SnackBar
+        open={showSnackBar}
+        handleClose={() => setShowSnackBar(false)}
+        severity={SnackBarSeverity}
+        message={SnackBarMessage}
+      ></SnackBar>
     </div>
   );
 };

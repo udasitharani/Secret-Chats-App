@@ -10,13 +10,11 @@ import AppTheme from "./Themes/DefaultTheme";
 console.log(AppTheme);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MuiThemeProvider theme={AppTheme}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </MuiThemeProvider>
-  </React.StrictMode>,
+  <MuiThemeProvider theme={AppTheme}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </MuiThemeProvider>,
   document.getElementById("root")
 );
 

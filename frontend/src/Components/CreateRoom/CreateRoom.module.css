@@ -18,32 +18,10 @@
   padding: 0 10% !important;
 }
 
-.inputField {
-  width: 100% !important;
-  height: 8vh !important;
-  margin: 5vh 0 !important;
-}
-
-.submitButton {
-  align-self: flex-end;
-  margin-top: 20vh !important;
-}
-
 @media only screen and (min-width: 600px) {
   .grid {
     width: 100% !important;
     height: 100% !important;
     padding: 0 30% !important;
-  }
-
-  .inputField {
-    width: 100% !important;
-    height: 10vh !important;
-    margin: 2vh 0 !important;
-  }
-
-  .submitButton {
-    align-self: flex-end;
-    margin-top: 10vh !important;
   }
 }
