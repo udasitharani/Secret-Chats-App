@@ -5,6 +5,18 @@ import { Grid, TextField, Button } from "@material-ui/core";
 const CreateRoom = () => {
   const [username, setUsername] = useState("");
   const [roomname, setRoomname] = useState("");
+
+  const postCreateRoom = async () => {
+    const data = { username, roomname };
+    const response = await fetch("http://127.0.0.1:8080/api/chat-room/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+  };
+
   return (
     <Grid
       className={styles.container}
@@ -31,6 +43,7 @@ const CreateRoom = () => {
         className={styles.submitButton}
         variant="outlined"
         color="secondary"
+        onClick={postCreateRoom}
       >
         Continue
       </Button>

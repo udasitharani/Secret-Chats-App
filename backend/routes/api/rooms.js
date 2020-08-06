@@ -8,23 +8,24 @@ FirebaseAdmin.initializeApp({
 });
 const db = FirebaseAdmin.firestore();
 
-router.post("/create", (req, res) => {
+router.post("/create", async (req, res) => {
   try {
-    const { roomName, username } = req.body;
-    if (username && roomName) {
-      const doc = db.collection("rooms").add({
-        roomName,
+    const { roomname, username } = req.body;
+    if (username && roomname) {
+      const doc = await db.collection("rooms").add({
+        roomname,
         members: [username],
         messages: [],
       });
-      const roomKey = doc.id;
+      const roomkey = doc.id;
+      console.log(doc.id);
       res.json({
         message: "successfully added.",
-        roomKey: roomKey,
+        roomkey: roomkey,
       });
     } else {
       res.status(400).json({
-        message: "username/roomKey/roomName not provided.",
+        message: "username/roomkey/roomname not provided.",
       });
     }
   } catch (e) {
@@ -38,15 +39,15 @@ router.post("/create", (req, res) => {
 router.post("/join", (req, res) => {
   (async () => {
     try {
-      const { username, roomKey } = req.body;
-      if (username && roomKey) {
+      const { username, roomkey } = req.body;
+      if (username && roomkey) {
         const roomData = (
-          await db.collection("rooms").doc(roomKey).get()
+          await db.collection("rooms").doc(roomkey).get()
         ).data();
         if (roomData.members.indexOf(username) == -1) {
           await db
             .collection("rooms")
-            .doc(roomKey)
+            .doc(roomkey)
             .set({ members: [...roomData.members, username] }, { merge: true });
 
           res.json({ message: "success" });
@@ -54,7 +55,7 @@ router.post("/join", (req, res) => {
           res.status(400).json({ message: "duplicate username." });
         }
       } else {
-        res.status(400).json({ message: "roomKey/username not specified." });
+        res.status(400).json({ message: "roomkey/username not specified." });
       }
     } catch (e) {
       console.log(e);
@@ -68,16 +69,16 @@ router.post("/join", (req, res) => {
 router.post("/leave", (req, res) => {
   (async () => {
     try {
-      const { username, roomKey } = req.body;
-      if (username && roomKey) {
+      const { username, roomkey } = req.body;
+      if (username && roomkey) {
         const newMembers = (
-          await db.collection("rooms").doc(roomKey).get()
+          await db.collection("rooms").doc(roomkey).get()
         ).data().members;
         if (newMembers.indexOf(username) >= 0) {
           newMembers.splice(newMembers.indexOf(username), 1);
           await db
             .collection("rooms")
-            .doc(roomKey)
+            .doc(roomkey)
             .set({ members: newMembers }, { merge: true });
           res.json({ message: "success!" });
         } else {
