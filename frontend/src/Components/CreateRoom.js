@@ -1,8 +1,19 @@
 import React from "react";
-import { TextField } from "@material-ui/core";
+import { Grid, TextField } from "@material-ui/core";
 
 const CreateRoom = () => {
-  return <TextField variant="outlined" />;
+  return (
+    <Grid
+      style={{ height: "100%" }}
+      direction="column"
+      container
+      justify="center"
+      alignItems="center"
+    >
+      <TextField label="Your Name" variant="outlined" />
+      <TextField label="Room Name" variant="outlined" />
+    </Grid>
+  );
 };
 
 export default CreateRoom;
