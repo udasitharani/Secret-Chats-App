@@ -10,5 +10,4 @@ const ChatRoom = (props) => {
 
   return <div> {props.location.state.roomname} </div>;
 };
-
 export default ChatRoom;
