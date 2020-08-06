@@ -39,9 +39,17 @@ const CreateRoom = () => {
           body: JSON.stringify(data),
         }
       );
+      const responseJSON = await response.json();
       setInProgress(false);
       if (response.status === 200) {
-        setSnackBarMessage("Successfully created '" + roomname + "' chatroom.");
+        setSnackBarMessage(
+          "Successfully created '" +
+            roomname +
+            "' chatroom. Room Key: '" +
+            responseJSON["roomkey"] +
+            "' has been copeid to your clipboard."
+        );
+        await navigator.clipboard.writeText(responseJSON["roomkey"]);
         setSnackBarSeverity("success");
       } else if (response.status === 400) {
         setSnackBarMessage("User-Name/Room-Name not provided.");
