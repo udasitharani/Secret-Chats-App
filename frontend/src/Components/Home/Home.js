@@ -1,11 +1,12 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import PrimaryButton from "./PrimaryButton";
+import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import styles from "./Home.module.css";
 
 const Home = () => {
   return (
     <Grid
-      style={{ height: "100%" }}
+      className={styles.container}
       container
       direction="column"
       justify="center"

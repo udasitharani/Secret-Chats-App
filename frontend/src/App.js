@@ -1,10 +1,10 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { Grid } from "@material-ui/core";
-import AppHeader from "./Components/AppBar";
+import AppHeader from "./Components/AppBar/AppBar";
 import "./App.css";
-import Home from "./Components/Home";
-import CreateRoom from "./Components/CreateRoom";
+import Home from "./Components/Home/Home";
+import CreateRoom from "./Components/CreateRoom/CreateRoom";
 
 const App = () => {
   return (
