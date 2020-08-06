@@ -57,7 +57,6 @@ const CreateRoom = (props) => {
               "' has been copeid to your clipboard.",
             roomkey: responseJSON["roomkey"],
             roomname: roomname,
-            // setHeaderTitle: props.setHeaderTitle,
           },
         });
       } else if (response.status === 400) {

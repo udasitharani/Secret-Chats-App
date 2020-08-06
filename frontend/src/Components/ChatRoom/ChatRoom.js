@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import TitleContext from "../../contexts/TitleContext";
 
 const ChatRoom = (props) => {
-  console.log(props.location.state);
-  return <div>hello</div>;
+  const { setHeaderTitle } = useContext(TitleContext);
+
+  useEffect(() => {
+    setHeaderTitle(props.location.state.roomname);
+  }, [props.location.state.roomname]);
+
+  return <div> {props.location.state.roomname} </div>;
 };
 
 export default ChatRoom;

@@ -7,36 +7,41 @@ import Home from "./Components/Home/Home";
 import CreateRoom from "./Components/CreateRoom/CreateRoom";
 import JoinRoom from "./Components/JoinRoom/JoinRoom";
 import ChatRoom from "./Components/ChatRoom/ChatRoom";
+import TitleContext from "./contexts/TitleContext";
 
 const App = () => {
   const [headerTitle, setHeaderTitle] = useState("Secrets");
-  return (
-    <div style={{ height: "100vh" }} className="App">
-      <Grid
-        container
-        style={{ height: "100%" }}
-        direction="column"
-        justify="flex-start"
-        align-items="center"
-      >
-        <Switch>
-          <Route path="/chat-room" component={ChatRoom} />
 
+  const titleContext = { headerTitle, setHeaderTitle };
+
+  return (
+    <TitleContext.Provider value={titleContext}>
+      <div style={{ height: "100vh" }} className="App">
+        <Grid
+          container
+          style={{ height: "100%" }}
+          direction="column"
+          justify="flex-start"
+          align-items="center"
+        >
           <div className="app-header">
-            <AppHeader title={headerTitle}></AppHeader>
+            <AppHeader />
           </div>
           <div className="app-body" style={{ flex: "1 1 auto" }}>
-            <Route path="/" component={Home} exact />
-            <Route path="/create-room">
-              <CreateRoom setHeaderTitle={setHeaderTitle} />
-            </Route>
-            <Route path="/join-room">
-              <JoinRoom setHeaderTitle={setHeaderTitle} />
-            </Route>
+            <Switch>
+              <Route path="/" component={Home} exact />
+              <Route path="/create-room">
+                <CreateRoom />
+              </Route>
+              <Route path="/join-room">
+                <JoinRoom />
+              </Route>
+              <Route path="/chat-room" component={ChatRoom} />
+            </Switch>
           </div>
-        </Switch>
-      </Grid>
-    </div>
+        </Grid>
+      </div>
+    </TitleContext.Provider>
   );
 };
 
