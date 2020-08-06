@@ -1,0 +1,15 @@
+.primaryButton {
+  width: 70vw !important;
+  height: 10vh !important;
+  margin: 2vh !important;
+  font-size: 3vh !important;
+}
+
+@media only screen and (min-width: 600px) {
+  .primaryButton {
+    width: 40vw !important;
+    height: 10vh !important;
+    margin: 2vh !important;
+    font-size: 3vh !important;
+  }
+}

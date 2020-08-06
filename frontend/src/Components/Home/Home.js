@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import LinkedButton from "../LinkedButton/LinkedButton";
 import styles from "./Home.module.css";
 
 const Home = () => {
@@ -13,10 +13,10 @@ const Home = () => {
       alignItems="center"
     >
       <div>
-        <PrimaryButton to="/create-room" text="Create Room" />
+        <LinkedButton to="/create-room" text="Create Room" />
       </div>
       <div>
-        <PrimaryButton to="/join-room" text="Join Room" />
+        <LinkedButton to="/join-room" text="Join Room" />
       </div>
     </Grid>
   );

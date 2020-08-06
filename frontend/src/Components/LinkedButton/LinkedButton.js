@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@material-ui/core";
-import styles from "./PrimaryButton.module.css";
+import styles from "./LinkedButton.module.css";
 import { Link } from "react-router-dom";
 
 const PrimaryButton = (props) => {
