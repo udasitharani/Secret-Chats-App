@@ -49,19 +49,25 @@ router.post("/join", (req, res) => {
             .collection("rooms")
             .doc(roomkey)
             .set({ members: [...roomData.members, username] }, { merge: true });
+          const data = roomData;
+          console.log(roomData);
 
-          res.json({ message: "success" });
+          res.json({ message: "success", roomname: roomData.roomname });
         } else {
-          res.status(400).json({ message: "duplicate username." });
+          res.status(400).json({ message: "Duplicate username." });
         }
       } else {
-        res.status(400).json({ message: "roomkey/username not specified." });
+        res.status(400).json({ message: "Roomkey/Username not specified." });
       }
     } catch (e) {
-      console.log(e);
-      res.status(500).json({
-        message: "Internal server error occurred. Try again.",
-      });
+      if (e.name == "TypeError") {
+        res.status(404).json({ message: "Room Not Found." });
+      } else {
+        console.log(e);
+        res.status(500).json({
+          message: "Internal server error occurred. Try again.",
+        });
+      }
     }
   })();
 });

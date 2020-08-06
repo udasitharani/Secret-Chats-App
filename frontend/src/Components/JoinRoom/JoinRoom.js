@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./CreateRoom.module.css";
+import styles from "./JoinRoom.module.css";
 import { Grid, CircularProgress } from "@material-ui/core";
 import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";
@@ -7,7 +7,7 @@ import SubmitButton from "../SubmitButton/SubmitButton";
 
 const CreateRoom = () => {
   const [username, setUsername] = useState("");
-  const [roomname, setRoomname] = useState("");
+  const [roomkey, setroomkey] = useState("");
   const [cpiClasses, setCpiClasses] = useState("circularProgress");
   const [gridClasses, setGridClasses] = useState("grid");
   const [inProgress, setInProgress] = useState(false);
@@ -26,39 +26,47 @@ const CreateRoom = () => {
   }, [inProgress]);
 
   const postCreateRoom = async () => {
-    const data = { username, roomname };
-    if (username && roomname) {
+    const data = { username, roomkey };
+    if (username && roomkey) {
       setInProgress(true);
-      const response = await fetch(
-        "http://127.0.0.1:8080/api/chat-room/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:8080/api/chat-room/join", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       setInProgress(false);
       if (response.status === 200) {
-        setSnackBarMessage("Successfully created '" + roomname + "' chatroom.");
+        setSnackBarMessage(
+          "Successfully joined '" +
+            (await response.json())["roomname"] +
+            "' chatroom."
+        );
         setSnackBarSeverity("success");
-      } else if (response.status === 400) {
-        setSnackBarMessage("User-Name/Room-Name not provided.");
+      } else if (
+        response.status === 400 ||
+        response.status === 404 ||
+        response.status === 500
+      ) {
+        setSnackBarMessage((await response.json())["message"]);
         setSnackBarSeverity("error");
-      } else if (response.status === 500) {
-        setSnackBarMessage("Internal server error occurred. Please try again.");
-        setSnackBarSeverity("error");
+        //   } else if (response.status === 404) {
+        //     setSnackBarMessage(response.json["message"]);
+        //     setSnackBarSeverity("error");
+        //   } else if (response.status === 500) {
+        //     setSnackBarMessage("Internal server error occurred. Please try again.");
+        //     setSnackBarSeverity("error");
       }
     } else {
-      if (!username && !roomname) {
-        setSnackBarMessage("Please provide username and roomname.");
+      if (!username && !roomkey) {
+        setSnackBarMessage("Please provide username and roomkey.");
         setSnackBarSeverity("warning");
       } else if (!username) {
         setSnackBarMessage("Please provide User Name.");
         setSnackBarSeverity("warning");
-      } else if (!roomname) {
-        setSnackBarMessage("Please provide Room Name.");
+      } else if (!roomkey) {
+        setSnackBarMessage("Please provide Room Key.");
         setSnackBarSeverity("warning");
       }
     }
@@ -81,9 +89,9 @@ const CreateRoom = () => {
           handleChange={(event) => setUsername(event.target.value)}
         />
         <InputField
-          label="Room Name"
-          value={roomname}
-          handleChange={(event) => setRoomname(event.target.value)}
+          label="Room Key"
+          value={roomkey}
+          handleChange={(event) => setroomkey(event.target.value)}
         />
         <SubmitButton onClick={postCreateRoom} label="Next" />
       </Grid>

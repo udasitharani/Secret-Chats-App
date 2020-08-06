@@ -5,6 +5,7 @@ import AppHeader from "./Components/AppBar/AppBar";
 import "./App.css";
 import Home from "./Components/Home/Home";
 import CreateRoom from "./Components/CreateRoom/CreateRoom";
+import JoinRoom from "./Components/JoinRoom/JoinRoom";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Switch>
             <Route path="/" component={Home} exact />
             <Route path="/create-room" component={CreateRoom} />
+            <Route path="/join-room" component={JoinRoom} />
           </Switch>
         </div>
       </Grid>
