@@ -6,6 +6,7 @@ import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import TitleContext from "../../contexts/TitleContext";
+import RoomDataContext from "../../contexts/RoomDataContext";
 
 const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
@@ -14,10 +15,11 @@ const CreateRoom = (props) => {
   const [gridClasses, setGridClasses] = useState("grid");
   const [inProgress, setInProgress] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
-  const [SnackBarSeverity, setSnackBarSeverity] = useState("");
+  const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
   let history = useHistory();
   const { setHeaderTitle } = useContext(TitleContext);
+  const { roomData, setRoomData } = useContext(RoomDataContext);
 
   useEffect(() => {
     setHeaderTitle("Secrets");
@@ -51,7 +53,12 @@ const CreateRoom = (props) => {
       setInProgress(false);
       if (response.status === 200) {
         await navigator.clipboard.writeText(responseJSON["roomkey"]);
-        history.push({
+        setRoomData({
+          roomkey: responseJSON["roomkey"],
+          roomname: roomname,
+          username: username,
+        });
+        await history.push({
           pathname: "/chat-room",
           state: {
             snackBarSeverity: "success",
@@ -61,16 +68,16 @@ const CreateRoom = (props) => {
               "' chatroom. Room Key: '" +
               responseJSON["roomkey"] +
               "' has been copeid to your clipboard.",
-            roomkey: responseJSON["roomkey"],
-            roomname: roomname,
           },
         });
       } else if (response.status === 400) {
         setSnackBarMessage("User-Name/Room-Name not provided.");
         setSnackBarSeverity("error");
+        setShowSnackBar(true);
       } else if (response.status === 500) {
         setSnackBarMessage("Internal server error occurred. Please try again.");
         setSnackBarSeverity("error");
+        setShowSnackBar(true);
       }
     } else {
       if (!username && !roomname) {
@@ -83,8 +90,8 @@ const CreateRoom = (props) => {
         setSnackBarMessage("Please provide Room Name.");
         setSnackBarSeverity("warning");
       }
+      setShowSnackBar(true);
     }
-    setShowSnackBar(true);
   };
 
   return (

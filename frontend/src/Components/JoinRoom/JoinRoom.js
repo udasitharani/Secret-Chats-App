@@ -6,6 +6,7 @@ import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import TitleContext from "../../contexts/TitleContext";
+import RoomDataContext from "../../contexts/RoomDataContext";
 
 const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
@@ -14,13 +15,15 @@ const CreateRoom = (props) => {
   const [gridClasses, setGridClasses] = useState("grid");
   const [inProgress, setInProgress] = useState(false);
   const [showSnackBar, setShowSnackBar] = useState(false);
-  const [SnackBarSeverity, setSnackBarSeverity] = useState("");
+  const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
   let history = useHistory();
   const { setHeaderTitle } = useContext(TitleContext);
+  const { roomData, setRoomData } = useContext(RoomDataContext);
 
   useEffect(() => {
     setHeaderTitle("Secrets");
+    console.log(roomData);
   });
 
   useEffect(() => {
@@ -47,6 +50,11 @@ const CreateRoom = (props) => {
       setInProgress(false);
       if (response.status === 200) {
         const responseJSON = await response.json();
+        setRoomData({
+          roomkey: roomkey,
+          roomname: responseJSON["roomname"],
+          username: username,
+        });
         history.push({
           pathname: "/chat-room",
           state: {
@@ -55,9 +63,6 @@ const CreateRoom = (props) => {
               "Successfully joined '" +
               responseJSON["roomname"] +
               "' chatroom.",
-            roomkey: responseJSON["roomkey"],
-            roomname: responseJSON["roomname"],
-            // setHeaderTitle: props.setHeaderTitle,
           },
         });
       } else if (
@@ -67,12 +72,7 @@ const CreateRoom = (props) => {
       ) {
         setSnackBarMessage((await response.json())["message"]);
         setSnackBarSeverity("error");
-        //   } else if (response.status === 404) {
-        //     setSnackBarMessage(response.json["message"]);
-        //     setSnackBarSeverity("error");
-        //   } else if (response.status === 500) {
-        //     setSnackBarMessage("Internal server error occurred. Please try again.");
-        //     setSnackBarSeverity("error");
+        setShowSnackBar(true);
       }
     } else {
       if (!username && !roomkey) {
@@ -85,8 +85,8 @@ const CreateRoom = (props) => {
         setSnackBarMessage("Please provide Room Key.");
         setSnackBarSeverity("warning");
       }
+      setShowSnackBar(true);
     }
-    setShowSnackBar(true);
   };
 
   return (
