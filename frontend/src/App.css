@@ -10,3 +10,7 @@ a:active {
   text-decoration: none;
   color: #efefef;
 }
+
+*::-webkit-scrollbar {
+  display: none;
+}

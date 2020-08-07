@@ -1,0 +1,9 @@
+.containerGrid {
+  height: 100%;
+  width: 100%;
+}
+
+.messagesContainer {
+  flex: 1 1 auto;
+  background: #ffffff;
+}
