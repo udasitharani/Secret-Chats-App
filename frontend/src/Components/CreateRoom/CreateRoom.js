@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Grid, CircularProgress } from "@material-ui/core";
 import styles from "./CreateRoom.module.css";
 import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
+import TitleContext from "../../contexts/TitleContext";
 
 const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
@@ -16,6 +17,11 @@ const CreateRoom = (props) => {
   const [SnackBarSeverity, setSnackBarSeverity] = useState("");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
   let history = useHistory();
+  const { setHeaderTitle } = useContext(TitleContext);
+
+  useEffect(() => {
+    setHeaderTitle("Secrets");
+  }, []);
 
   useEffect(() => {
     if (inProgress) {
