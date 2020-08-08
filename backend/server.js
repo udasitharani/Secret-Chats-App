@@ -32,10 +32,12 @@ io.on("connect", async (socket) => {
       .doc(roomkey)
       .collection("messages");
     messagesCollection.onSnapshot((querySnapshot) => {
+      const messages = [];
       querySnapshot.forEach((messageDoc) => {
         const message = { id: messageDoc.id, ...messageDoc.data() };
-        socket.emit("newMessage", message);
+        messages.push(message);
       });
+      socket.emit("newMessage", messages);
     });
   });
 
@@ -43,15 +45,15 @@ io.on("connect", async (socket) => {
     await messagesCollection.add({ ...message });
   });
 
-  socket.on("getInitialMessageFlood", async () => {
-    const messages = [];
-    const messagesCollectionRef = await messagesCollection.get();
-    messagesCollectionRef.forEach((messageDoc) => {
-      const message = { id: messageDoc.id, ...messageDoc.data() };
-      messages.push(message);
-    });
-    socket.emit("initialMessageFlood", messages);
-  });
+  // socket.on("getInitialMessageFlood", async () => {
+  //   const messages = [];
+  //   const messagesCollectionRef = await messagesCollection.get();
+  //   messagesCollectionRef.forEach((messageDoc) => {
+  //     const message = { id: messageDoc.id, ...messageDoc.data() };
+  //     messages.push(message);
+  //   });
+  //   socket.emit("initialMessageFlood", messages);
+  // });
 
   socket.on("disconnect", () => {
     console.log("disconnected.");

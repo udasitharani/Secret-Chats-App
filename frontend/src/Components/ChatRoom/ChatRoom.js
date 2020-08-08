@@ -4,6 +4,7 @@ import socketIOClient from "socket.io-client";
 import { Grid } from "@material-ui/core";
 import ChatInput from "../ChatInput/ChatInput";
 import SnackBar from "../SnackBar/SnackBar";
+import MessagesBody from "../MessagesBody/MessagesBody";
 import styles from "./ChatRoom.module.css";
 import TitleContext from "../../contexts/TitleContext";
 import RoomDataContext from "../../contexts/RoomDataContext";
@@ -34,7 +35,7 @@ const ChatRoom = (props) => {
         username: roomData["username"],
       };
       console.log("3. Let's fetch('leaveeee').");
-      fetch("http://127.0.0.1:8080/api/chat-room/leave", {
+      await fetch("http://127.0.0.1:8080/api/chat-room/leave", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +53,7 @@ const ChatRoom = (props) => {
     setRoomData({});
     if (socket) {
       console.log("7. Inside the socket.");
-      socket.disconnect();
+      await socket.disconnect();
     }
     console.log("8. Pushing history.");
     history.push("/");
@@ -60,8 +61,12 @@ const ChatRoom = (props) => {
   };
 
   const sendMessage = () => {
-    console.log(socket);
-    socket.emit("pushMessage", { message: message, by: roomData["username"] });
+    if (message) {
+      socket.emit("pushMessage", {
+        text: message,
+        by: roomData["username"],
+      });
+    }
     setMessage("");
   };
 
@@ -72,22 +77,26 @@ const ChatRoom = (props) => {
 
       const newSocket = socketIOClient("http://127.0.0.1:8080");
       setSocket(newSocket);
-      console.log(newSocket);
       newSocket.emit("initialSetup", roomData["roomkey"]);
       newSocket.emit("getInitialMessageFlood");
       newSocket.on("initialMessageFlood", (data) => {
-        setMessages(data);
+        console.log("initialMessageFlood");
+        setMessages([...messages, data]);
       });
       newSocket.on("newMessage", (message) => {
-        setMessages([...messages, message]);
+        (async () => {
+          await setMessages([...messages, ...message]);
+        })();
       });
     } else {
       history.push("/join-room");
     }
     return () => {
-      console.log("start leaving...........");
-      leaveRoom();
-      console.log("leftttttttttttttttttt...........");
+      (async () => {
+        console.log("start leaving...........");
+        leaveRoom();
+        console.log("leftttttttttttttttttt...........");
+      })();
     };
   }, []);
 
@@ -96,18 +105,19 @@ const ChatRoom = (props) => {
       <Grid
         className={styles.containerGrid}
         container
-        direction="column-reverse"
-        justify="flex-start"
+        direction="column"
+        justify="flex-end"
         align-items="center"
       >
+        <div className={styles.messagesBody}>
+          <MessagesBody messages={messages} />
+        </div>
         <ChatInput
           value={message}
           handleChange={(event) => setMessage(event.target.value)}
           handleSend={sendMessage}
         />
-        <div className={styles.messagesBody}>hello</div>
       </Grid>
-      {SnackBarSeverity}
       <SnackBar
         open={showSnackBar}
         handleClose={() => setShowSnackBar(false)}
