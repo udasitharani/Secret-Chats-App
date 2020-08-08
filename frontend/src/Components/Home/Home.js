@@ -12,7 +12,7 @@ const Home = () => {
   const { roomData, setRoomData } = useContext(RoomDataContext);
   const {
     showSnackBar,
-    setshowSnackBar,
+    setShowSnackBar,
     SnackBarSeverity,
     SnackBarMessage,
   } = useContext(SnackBarContext);

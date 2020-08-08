@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.messagesContainer {
+.messagesBody {
   flex: 1 1 auto;
   background: #ffffff;
 }

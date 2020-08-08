@@ -7,6 +7,7 @@ import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import TitleContext from "../../contexts/TitleContext";
 import RoomDataContext from "../../contexts/RoomDataContext";
+import SnackBarContext from "../../contexts/SnackBarContext";
 
 const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
@@ -19,7 +20,7 @@ const CreateRoom = (props) => {
   const { roomData, setRoomData } = useContext(RoomDataContext);
   const {
     showSnackBar,
-    setshowSnackBar,
+    setShowSnackBar,
     SnackBarSeverity,
     setSnackBarSeverity,
     SnackBarMessage,

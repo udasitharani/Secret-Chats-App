@@ -14,14 +14,14 @@ import SnackBarContext from "./contexts/SnackBarContext";
 const App = () => {
   const [headerTitle, setHeaderTitle] = useState("Secrets");
   const [roomData, setRoomData] = useState({});
-  const [showSnackBar, setshowSnackBar] = useState(false);
+  const [showSnackBar, setShowSnackBar] = useState(false);
   const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
   const titleContext = { headerTitle, setHeaderTitle };
   const roomDataContext = { roomData, setRoomData };
   const snackBarContext = {
     showSnackBar,
-    setshowSnackBar,
+    setShowSnackBar,
     SnackBarSeverity,
     setSnackBarSeverity,
     SnackBarMessage,

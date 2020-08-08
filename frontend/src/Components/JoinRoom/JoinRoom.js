@@ -20,7 +20,7 @@ const CreateRoom = (props) => {
   const { roomData, setRoomData } = useContext(RoomDataContext);
   const {
     showSnackBar,
-    setshowSnackBar,
+    setShowSnackBar,
     SnackBarSeverity,
     setSnackBarSeverity,
     SnackBarMessage,
