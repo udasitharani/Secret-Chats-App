@@ -5,13 +5,17 @@ import styles from "./Home.module.css";
 import SnackBar from "../SnackBar/SnackBar";
 import TitleContext from "../../contexts/TitleContext";
 import RoomDataContext from "../../contexts/RoomDataContext";
+import SnackBarContext from "../../contexts/SnackBarContext";
 
 const Home = () => {
   const { setHeaderTitle } = useContext(TitleContext);
   const { roomData, setRoomData } = useContext(RoomDataContext);
-  const [showSnackBar, setShowSnackBar] = useState(false);
-  const [SnackBarSeverity, setSnackBarSeverity] = useState("");
-  const [SnackBarMessage, setSnackBarMessage] = useState("");
+  const {
+    showSnackBar,
+    setshowSnackBar,
+    SnackBarSeverity,
+    SnackBarMessage,
+  } = useContext(SnackBarContext);
 
   useEffect(() => {
     setHeaderTitle("Secrets");

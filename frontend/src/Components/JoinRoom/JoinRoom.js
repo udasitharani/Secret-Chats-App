@@ -7,6 +7,7 @@ import InputField from "../InputField/InputField";
 import SubmitButton from "../SubmitButton/SubmitButton";
 import TitleContext from "../../contexts/TitleContext";
 import RoomDataContext from "../../contexts/RoomDataContext";
+import SnackBarContext from "../../contexts/SnackBarContext";
 
 const CreateRoom = (props) => {
   const [username, setUsername] = useState("");
@@ -14,12 +15,17 @@ const CreateRoom = (props) => {
   const [cpiClasses, setCpiClasses] = useState("circularProgress");
   const [gridClasses, setGridClasses] = useState("grid");
   const [inProgress, setInProgress] = useState(false);
-  const [showSnackBar, setShowSnackBar] = useState(false);
-  const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
-  const [SnackBarMessage, setSnackBarMessage] = useState("");
   let history = useHistory();
   const { setHeaderTitle } = useContext(TitleContext);
   const { roomData, setRoomData } = useContext(RoomDataContext);
+  const {
+    showSnackBar,
+    setshowSnackBar,
+    SnackBarSeverity,
+    setSnackBarSeverity,
+    SnackBarMessage,
+    setSnackBarMessage,
+  } = useContext(SnackBarContext);
 
   useEffect(() => {
     setHeaderTitle("Secrets");
@@ -46,30 +52,25 @@ const CreateRoom = (props) => {
         },
         body: JSON.stringify(data),
       });
+      const responseJSON = await response.json();
       setInProgress(false);
       if (response.status === 200) {
-        const responseJSON = await response.json();
         setRoomData({
           roomkey: roomkey,
           roomname: responseJSON["roomname"],
           username: username,
         });
-        history.push({
-          pathname: "/chat-room",
-          state: {
-            snackBarSeverity: "success",
-            snackBarMessage:
-              "Successfully joined '" +
-              responseJSON["roomname"] +
-              "' chatroom.",
-          },
-        });
+        setSnackBarMessage(
+          "Joined '" + responseJSON["roomname"] + "' chatroom."
+        );
+        setSnackBarSeverity("success");
+        history.push("/chat-room");
       } else if (
         response.status === 400 ||
         response.status === 404 ||
         response.status === 500
       ) {
-        setSnackBarMessage((await response.json())["message"]);
+        setSnackBarMessage(responseJSON["message"]);
         setSnackBarSeverity("error");
         setShowSnackBar(true);
       }

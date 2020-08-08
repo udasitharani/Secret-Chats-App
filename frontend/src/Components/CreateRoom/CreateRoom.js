@@ -14,12 +14,17 @@ const CreateRoom = (props) => {
   const [cpiClasses, setCpiClasses] = useState("circularProgress");
   const [gridClasses, setGridClasses] = useState("grid");
   const [inProgress, setInProgress] = useState(false);
-  const [showSnackBar, setShowSnackBar] = useState(false);
-  const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
-  const [SnackBarMessage, setSnackBarMessage] = useState("");
   let history = useHistory();
   const { setHeaderTitle } = useContext(TitleContext);
   const { roomData, setRoomData } = useContext(RoomDataContext);
+  const {
+    showSnackBar,
+    setshowSnackBar,
+    SnackBarSeverity,
+    setSnackBarSeverity,
+    SnackBarMessage,
+    setSnackBarMessage,
+  } = useContext(SnackBarContext);
 
   useEffect(() => {
     setHeaderTitle("Secrets");
@@ -58,18 +63,15 @@ const CreateRoom = (props) => {
           roomname: roomname,
           username: username,
         });
-        await history.push({
-          pathname: "/chat-room",
-          state: {
-            snackBarSeverity: "success",
-            snackBarMessage:
-              "Successfully created '" +
-              roomname +
-              "' chatroom. Room Key: '" +
-              responseJSON["roomkey"] +
-              "' has been copied to your clipboard.",
-          },
-        });
+        setSnackBarSeverity("success");
+        setSnackBarMessage(
+          "Successfully created '" +
+            roomname +
+            "' chatroom. Room Key: '" +
+            responseJSON["roomkey"] +
+            "' has been copied to your clipboard."
+        );
+        history.push("/chat-room");
       } else if (response.status === 400) {
         setSnackBarMessage("User-Name/Room-Name not provided.");
         setSnackBarSeverity("error");

@@ -1,18 +1,24 @@
 import React, { useState, useContext, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-import TitleContext from "../../contexts/TitleContext";
 import { Grid } from "@material-ui/core";
 import ChatInput from "../ChatInput/ChatInput";
 import SnackBar from "../SnackBar/SnackBar";
 import styles from "./ChatRoom.module.css";
+import TitleContext from "../../contexts/TitleContext";
 import RoomDataContext from "../../contexts/RoomDataContext";
+import SnackBarContext from "../../contexts/SnackBarContext";
 
 const ChatRoom = (props) => {
   const { setHeaderTitle } = useContext(TitleContext);
   const { roomData, setRoomData } = useContext(RoomDataContext);
-  const [showSnackBar, setShowSnackBar] = useState(true);
-  const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
-  const [SnackBarMessage, setSnackBarMessage] = useState("");
+  const {
+    showSnackBar,
+    setshowSnackBar,
+    SnackBarSeverity,
+    setSnackBarSeverity,
+    SnackBarMessage,
+    setSnackBarMessage,
+  } = useContext(SnackBarContext);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState();
@@ -29,9 +35,12 @@ const ChatRoom = (props) => {
       },
       body: JSON.stringify(data),
     });
+    const roomname = roomData["roomname"];
     setRoomData({});
-    props.location.state = {};
     socket.disconnect();
+    setSnackBarMessage("Left " + roomname + ".");
+    setSnackBarSeverity("success");
+    setShowSnackBar(true);
   };
 
   const sendMessage = () => {
@@ -42,8 +51,6 @@ const ChatRoom = (props) => {
 
   useEffect(() => {
     if (roomData["roomkey"]) {
-      setSnackBarMessage(props.location.state.snackBarMessage);
-      setSnackBarSeverity(props.location.state.snackBarSeverity);
       setHeaderTitle(roomData.roomname);
       window.onbeforeunload = leaveRoom;
 
