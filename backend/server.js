@@ -23,8 +23,35 @@ app.get("/", (req, res) => {
 const server = http.createServer(app);
 const io = socketIO(server);
 
-io.on("connection", (socket) => {
-  console.log("connected to the socket!");
+io.on("connect", async (socket) => {
+  let messagesCollection;
+
+  socket.on("initialSetup", async (roomkey) => {
+    messagesCollection = await db
+      .collection("rooms")
+      .doc(roomkey)
+      .collection("messages");
+    messagesCollection.onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((messageDoc) => {
+        const message = { id: messageDoc.id, ...messageDoc.data() };
+        socket.emit("newMessage", message);
+      });
+    });
+  });
+
+  socket.on("pushMessage", async (message) => {
+    await messagesCollection.add({ ...message });
+  });
+
+  socket.on("getInitialMessageFlood", async () => {
+    const messages = [];
+    const messagesCollectionRef = await messagesCollection.get();
+    messagesCollectionRef.forEach((messageDoc) => {
+      const message = { id: messageDoc.id, ...messageDoc.data() };
+      messages.push(message);
+    });
+    socket.emit("initialMessageFlood", messages);
+  });
 
   socket.on("disconnect", () => {
     console.log("disconnected.");

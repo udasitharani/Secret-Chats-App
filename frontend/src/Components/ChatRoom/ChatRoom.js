@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import socketIOClient from "socket.io-client";
 import TitleContext from "../../contexts/TitleContext";
 import { Grid, Snackbar } from "@material-ui/core";
 import ChatInput from "../ChatInput/ChatInput";
@@ -12,6 +13,7 @@ const ChatRoom = (props) => {
   const [showSnackBar, setShowSnackBar] = useState(true);
   const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const leaveRoom = async () => {
     const data = {
@@ -30,11 +32,25 @@ const ChatRoom = (props) => {
   };
 
   useEffect(() => {
+    console.log(messages);
+  }, [messages]);
+
+  useEffect(() => {
     if (roomData["roomkey"]) {
       setSnackBarMessage(props.location.state.snackBarMessage);
       setSnackBarSeverity(props.location.state.snackBarSeverity);
       setHeaderTitle(roomData.roomname);
       window.onbeforeunload = leaveRoom;
+
+      const socket = socketIOClient("http://127.0.0.1:8080");
+      socket.emit("initialSetup", roomData["roomkey"]);
+      socket.emit("getInitialMessageFlood");
+      socket.on("initialMessageFlood", (data) => {
+        setMessages(data);
+      });
+      socket.on("newMessage", (message) => {
+        setMessages([...messages, message]);
+      });
     }
     return async () => {
       await leaveRoom();

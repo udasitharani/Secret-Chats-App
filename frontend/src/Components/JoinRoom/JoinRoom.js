@@ -23,7 +23,6 @@ const CreateRoom = (props) => {
 
   useEffect(() => {
     setHeaderTitle("Secrets");
-    console.log(roomData);
   });
 
   useEffect(() => {

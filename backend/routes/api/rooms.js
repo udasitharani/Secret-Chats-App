@@ -45,15 +45,12 @@ router.post("/join", (req, res) => {
         const doc = await db.collection("rooms").doc(roomkey);
         const roomData = (await doc.get()).data();
         if (roomData.members.indexOf(username) == -1) {
-          await db
-            .collection("rooms")
-            .doc(roomkey)
-            .set(
-              {
-                members: [...roomData.members, username],
-              },
-              { merge: true }
-            );
+          await doc.set(
+            {
+              members: [...roomData.members, username],
+            },
+            { merge: true }
+          );
           await doc
             .collection("messages")
             .add({ message: joinMessage, by: "" });
