@@ -5,7 +5,6 @@ import {
   OutlinedInput,
   SvgIcon,
 } from "@material-ui/core";
-import styles from "./ChatInput.module.css";
 
 const ChatInput = (props) => {
   return (

@@ -17,7 +17,7 @@ const CreateRoom = (props) => {
   const [inProgress, setInProgress] = useState(false);
   let history = useHistory();
   const { setHeaderTitle } = useContext(TitleContext);
-  const { roomData, setRoomData } = useContext(RoomDataContext);
+  const { setRoomData } = useContext(RoomDataContext);
   const {
     showSnackBar,
     setShowSnackBar,

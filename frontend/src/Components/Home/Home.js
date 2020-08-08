@@ -1,15 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Grid, Snackbar } from "@material-ui/core";
+import React, { useContext, useEffect } from "react";
+import { Grid } from "@material-ui/core";
 import LinkedButton from "../LinkedButton/LinkedButton";
 import styles from "./Home.module.css";
 import SnackBar from "../SnackBar/SnackBar";
 import TitleContext from "../../contexts/TitleContext";
-import RoomDataContext from "../../contexts/RoomDataContext";
 import SnackBarContext from "../../contexts/SnackBarContext";
 
 const Home = () => {
   const { setHeaderTitle } = useContext(TitleContext);
-  const { roomData, setRoomData } = useContext(RoomDataContext);
   const {
     showSnackBar,
     setShowSnackBar,
