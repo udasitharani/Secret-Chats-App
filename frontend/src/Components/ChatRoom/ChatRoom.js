@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import TitleContext from "../../contexts/TitleContext";
-import { Grid, Snackbar } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import ChatInput from "../ChatInput/ChatInput";
 import SnackBar from "../SnackBar/SnackBar";
 import styles from "./ChatRoom.module.css";
@@ -14,13 +14,15 @@ const ChatRoom = (props) => {
   const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
   const [SnackBarMessage, setSnackBarMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [socket, setSocket] = useState();
 
   const leaveRoom = async () => {
     const data = {
       roomkey: roomData["roomkey"],
       username: roomData["username"],
     };
-    const response = await fetch("http://127.0.0.1:8080/api/chat-room/leave", {
+    await fetch("http://127.0.0.1:8080/api/chat-room/leave", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,11 +31,14 @@ const ChatRoom = (props) => {
     });
     setRoomData({});
     props.location.state = {};
+    socket.disconnect();
   };
 
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
+  const sendMessage = () => {
+    console.log(socket);
+    socket.emit("pushMessage", { message: message, by: roomData["username"] });
+    setMessage("");
+  };
 
   useEffect(() => {
     if (roomData["roomkey"]) {
@@ -42,13 +47,15 @@ const ChatRoom = (props) => {
       setHeaderTitle(roomData.roomname);
       window.onbeforeunload = leaveRoom;
 
-      const socket = socketIOClient("http://127.0.0.1:8080");
-      socket.emit("initialSetup", roomData["roomkey"]);
-      socket.emit("getInitialMessageFlood");
-      socket.on("initialMessageFlood", (data) => {
+      const newSocket = socketIOClient("http://127.0.0.1:8080");
+      setSocket(newSocket);
+      console.log(newSocket);
+      newSocket.emit("initialSetup", roomData["roomkey"]);
+      newSocket.emit("getInitialMessageFlood");
+      newSocket.on("initialMessageFlood", (data) => {
         setMessages(data);
       });
-      socket.on("newMessage", (message) => {
+      newSocket.on("newMessage", (message) => {
         setMessages([...messages, message]);
       });
     }
@@ -66,7 +73,11 @@ const ChatRoom = (props) => {
         justify="flex-start"
         align-items="center"
       >
-        <ChatInput />
+        <ChatInput
+          value={message}
+          handleChange={(event) => setMessage(event.target.value)}
+          handleSend={sendMessage}
+        />
         <div className={styles.messagesContainer}>hello</div>
       </Grid>
       {SnackBarSeverity}

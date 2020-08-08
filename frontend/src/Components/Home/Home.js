@@ -33,7 +33,7 @@ const Home = () => {
           <LinkedButton to="/join-room" text="Join Room" />
         </div>
       </Grid>
-      <Snackbar
+      <SnackBar
         open={showSnackBar}
         handleClose={() => setShowSnackBar(false)}
         severity={SnackBarSeverity}
