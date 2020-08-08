@@ -92,13 +92,7 @@ const CreateRoom = (props) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <CircularProgress className={cpiClasses} />
-      <Grid
-        className={gridClasses}
-        direction="column"
-        container
-        justify="center"
-        alignItems="center"
-      >
+      <div className={gridClasses}>
         <InputField
           label="Your Name"
           value={username}
@@ -110,7 +104,7 @@ const CreateRoom = (props) => {
           handleChange={(event) => setroomkey(event.target.value)}
         />
         <SubmitButton onClick={postCreateRoom} label="Next" />
-      </Grid>
+      </div>
       <SnackBar
         open={showSnackBar}
         handleClose={() => setShowSnackBar(false)}

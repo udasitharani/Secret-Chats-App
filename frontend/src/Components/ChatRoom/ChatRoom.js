@@ -101,13 +101,14 @@ const ChatRoom = (props) => {
   }, []);
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
       <Grid
         className={styles.containerGrid}
         container
         direction="column"
         justify="flex-end"
         align-items="center"
+        wrap="nowrap"
       >
         <div className={styles.messagesBody}>
           <MessagesBody messages={messages} />

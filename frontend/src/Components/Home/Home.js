@@ -21,20 +21,14 @@ const Home = () => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Grid
-        className={styles.container}
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-      >
+      <div className={styles.container}>
         <div>
           <LinkedButton to="/create-room" text="Create Room" />
         </div>
         <div>
           <LinkedButton to="/join-room" text="Join Room" />
         </div>
-      </Grid>
+      </div>
       <SnackBar
         open={showSnackBar}
         handleClose={() => setShowSnackBar(false)}

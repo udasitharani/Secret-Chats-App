@@ -13,15 +13,27 @@
   display: none !important;
 }
 .grid {
-  width: 100% !important;
-  height: 100% !important;
-  padding: 0 10% !important;
+  width: 80%;
+  height: 100%;
+  max-width: 80%;
+  max-height: 100%;
+  padding: 0 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 @media only screen and (min-width: 600px) {
   .grid {
-    width: 100% !important;
-    height: 100% !important;
-    padding: 0 30% !important;
+    width: 40%;
+    height: 100%;
+    max-width: 40%;
+    max-height: 100%;
+    padding: 0 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }

@@ -32,18 +32,12 @@ const App = () => {
     <TitleContext.Provider value={titleContext}>
       <RoomDataContext.Provider value={roomDataContext}>
         <SnackBarContext.Provider value={snackBarContext}>
-          <div style={{ height: "100vh" }} className="App">
-            <Grid
-              container
-              style={{ height: "100%" }}
-              direction="column"
-              justify="flex-start"
-              align-items="center"
-            >
+          <div className="App">
+            <div className="AppWrapper">
               <div className="app-header">
                 <AppHeader />
               </div>
-              <div className="app-body" style={{ flex: "1 1 auto" }}>
+              <div className="app-body" style={{ flex: "1", overflow: "auto" }}>
                 <Switch>
                   <Route path="/" component={Home} exact />
                   <Route path="/create-room">
@@ -55,7 +49,7 @@ const App = () => {
                   <Route path="/chat-room" component={ChatRoom} />
                 </Switch>
               </div>
-            </Grid>
+            </div>
           </div>
         </SnackBarContext.Provider>
       </RoomDataContext.Provider>

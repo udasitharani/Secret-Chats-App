@@ -6,4 +6,5 @@
 .messagesBody {
   flex: 1 1 auto;
   background: #ffffff;
+  overflow: auto;
 }
