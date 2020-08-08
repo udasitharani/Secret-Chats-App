@@ -67,7 +67,7 @@ const CreateRoom = (props) => {
               roomname +
               "' chatroom. Room Key: '" +
               responseJSON["roomkey"] +
-              "' has been copeid to your clipboard.",
+              "' has been copied to your clipboard.",
           },
         });
       } else if (response.status === 400) {
