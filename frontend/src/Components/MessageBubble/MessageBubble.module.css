@@ -54,7 +54,8 @@
   left: 20px;
   margin: 5px 0;
   max-width: 70vw;
-  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
   text-align: start;
 }
 .notMyBubble::before {
