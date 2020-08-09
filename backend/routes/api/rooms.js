@@ -17,6 +17,7 @@ router.post("/create", async (req, res) => {
       await doc.collection("messages").add({
         text: createMessage,
         by: "",
+        timestamp: FirebaseAdmin.firestore.FieldValue.serverTimestamp(),
       });
       const roomkey = doc.id;
       res.json({
@@ -51,7 +52,13 @@ router.post("/join", (req, res) => {
             },
             { merge: true }
           );
-          await doc.collection("messages").add({ text: joinMessage, by: "" });
+          await doc
+            .collection("messages")
+            .add({
+              text: joinMessage,
+              by: "",
+              timestamp: FirebaseAdmin.firestore.FieldValue.serverTimestamp(),
+            });
           const data = roomData;
           res.json({ message: "success", roomname: roomData.roomname });
         } else {
@@ -90,7 +97,13 @@ router.post("/leave", (req, res) => {
             },
             { merge: true }
           );
-          await doc.collection("messages").add({ text: leaveMessage, by: "" });
+          await doc
+            .collection("messages")
+            .add({
+              text: leaveMessage,
+              by: "",
+              timestamp: FirebaseAdmin.firestore.FieldValue.serverTimestamp(),
+            });
           res.json({ message: "success!" });
         } else {
           res.status(404).json({ message: "user not found" });

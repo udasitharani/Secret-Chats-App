@@ -1,15 +1,23 @@
 import React, { useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MessageBubble from "../MessageBubble/MessageBubble";
+import styles from "./MessagesBody.module.css";
 
 const MessagesBody = (props) => {
+  useEffect(() => {
+    props.messages.map((element, index) => {
+      console.log(element.timestamp.toDate());
+    });
+  });
+
   return (
-    <Grid container direction="column" justify="flex-end" alignItems="center">
-      {/* {props.messages} */}
+    <div className={styles.body}>
       {props.messages.map((element, index) => {
-        return <div key={index}>{element.text}</div>;
+        return (
+          <MessageBubble key={element.id} text={element.text} by={element.by} />
+        );
       })}
-    </Grid>
+    </div>
   );
 };
 

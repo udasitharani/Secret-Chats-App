@@ -1,0 +1,109 @@
+.none {
+  display: none;
+}
+
+.sender {
+  font-size: 15px;
+  font-weight: 600;
+  color: #c80b50;
+  margin: 2px 0;
+}
+
+.myBubble {
+  font-size: 16px;
+  align-self: flex-end;
+  background: #eeeeee;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+  right: 20px;
+  margin: 5px 0;
+  max-width: 40vw;
+  word-break: break-all;
+  text-align: start;
+}
+.myBubble::after {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateX(90%);
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #eeeeee;
+}
+
+.notMyBubble {
+  font-size: 16px;
+  align-self: flex-start;
+  background: #d81b6011;
+  border-radius: 5px;
+  padding: 10px;
+  position: relative;
+  left: 20px;
+  margin: 5px 0;
+  max-width: 40vw;
+  word-break: break-all;
+  text-align: start;
+}
+.notMyBubble::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateX(-95%);
+  border-left: 10px solid transparent;
+  border-bottom: 10px solid #d81b6011;
+}
+
+.globalBubble {
+  align-self: center;
+  opacity: 0.6;
+  position: relative;
+  font-size: 12px;
+}
+
+@media only screen and (min-width: 600px) {
+  .none {
+    display: none;
+  }
+
+  .sender {
+    font-size: 18px;
+    font-weight: 700;
+    color: #c80b50;
+    margin: 5px 0;
+  }
+
+  .myBubble {
+    font-size: 20px;
+    padding: 12px;
+    margin: 5px 0;
+    max-width: 40vw;
+  }
+  .myBubble::after {
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #eeeeee;
+  }
+
+  .notMyBubble {
+    font-size: 20px;
+    padding: 12px;
+    margin: 5px 0;
+    max-width: 40vw;
+  }
+  .notMyBubble::before {
+    border-left: 15px solid transparent;
+    border-bottom: 15px solid #d81b6011;
+  }
+
+  .globalBubble {
+    align-self: center;
+    opacity: 0.6;
+    position: relative;
+    font-size: 15px;
+  }
+}

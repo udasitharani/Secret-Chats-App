@@ -6,7 +6,8 @@ const body_parser = require("body-parser");
 const path = require("path");
 const PORT = process.env.PORT || 8080;
 const app = express();
-const roomsRouter = require(path.join(__dirname, "routes", "api", "rooms"));
+const roomsRouter = require("./routes/api/rooms");
+const FirebaseAdmin = require("firebase-admin");
 
 const db = require("./firebase/firebase");
 
@@ -31,18 +32,23 @@ io.on("connect", async (socket) => {
       .collection("rooms")
       .doc(roomkey)
       .collection("messages");
-    messagesCollection.onSnapshot((querySnapshot) => {
-      const messages = [];
-      querySnapshot.forEach((messageDoc) => {
-        const message = { id: messageDoc.id, ...messageDoc.data() };
-        messages.push(message);
+    messagesCollection
+      .orderBy("timestamp", "asc")
+      .onSnapshot((querySnapshot) => {
+        const messages = [];
+        querySnapshot.forEach((messageDoc) => {
+          const message = { id: messageDoc.id, ...messageDoc.data() };
+          messages.push(message);
+        });
+        socket.emit("newMessage", messages);
       });
-      socket.emit("newMessage", messages);
-    });
   });
 
   socket.on("pushMessage", async (message) => {
-    await messagesCollection.add({ ...message });
+    await messagesCollection.add({
+      ...message,
+      timestamp: FirebaseAdmin.firestore.FieldValue.serverTimestamp(),
+    });
   });
 
   // socket.on("getInitialMessageFlood", async () => {
