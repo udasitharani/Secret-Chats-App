@@ -27,8 +27,9 @@
   position: relative;
   right: 20px;
   margin: 5px 0;
-  max-width: 40vw;
-  word-break: break-all;
+  max-width: 70vw;
+  word-wrap: break-word;
+  white-space: pre-wrap;
   text-align: start;
 }
 .myBubble::after {
@@ -52,7 +53,7 @@
   position: relative;
   left: 20px;
   margin: 5px 0;
-  max-width: 40vw;
+  max-width: 70vw;
   word-break: break-all;
   text-align: start;
 }

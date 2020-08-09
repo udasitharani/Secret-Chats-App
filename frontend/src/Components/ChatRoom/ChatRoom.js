@@ -32,13 +32,20 @@ const ChatRoom = (props) => {
         roomkey: roomData["roomkey"],
         username: roomData["username"],
       };
-      fetch("http://127.0.0.1:8080/api/chat-room/leave", {
+      fetch("/api/chat-room/leave", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
+      // fetch("http://127.0.0.1:8080/api/chat-room/leave", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // });
       const roomname = roomData["roomname"];
       setSnackBarMessage("Left " + roomname + ".");
       setSnackBarSeverity("success");
@@ -66,7 +73,7 @@ const ChatRoom = (props) => {
       setHeaderTitle(roomData.roomname);
       window.onbeforeunload = leaveRoom;
 
-      const newSocket = socketIOClient("http://127.0.0.1:8080");
+      const newSocket = socketIOClient("/");
       setSocket(newSocket);
       newSocket.emit("initialSetup", roomData["roomkey"]);
 

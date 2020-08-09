@@ -45,16 +45,23 @@ const CreateRoom = (props) => {
     const data = { username, roomname };
     if (username && roomname) {
       setInProgress(true);
-      const response = await fetch(
-        "http://127.0.0.1:8080/api/chat-room/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/api/chat-room/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      // const response = await fetch(
+      //   "http://127.0.0.1:8080/api/chat-room/create",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(data),
+      //   }
+      // );
       const responseJSON = await response.json();
       setInProgress(false);
       if (response.status === 200) {

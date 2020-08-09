@@ -10,16 +10,16 @@ const roomsRouter = require("./routes/api/rooms");
 const FirebaseAdmin = require("firebase-admin");
 
 const db = require("./firebase/firebase");
+const root = path.join(__dirname, "build");
 
 app.use(cors());
 app.use(body_parser.json());
 app.use("/api/chat-room", roomsRouter);
+app.use(express.static(root));
 
-app.get("/", (req, res) => {
-  res.send("I'm alive!");
+app.get("*", (req, res) => {
+  res.sendFile("index.html", { root });
 });
-
-// app.listen(PORT);
 
 const server = http.createServer(app);
 const io = socketIO(server);
