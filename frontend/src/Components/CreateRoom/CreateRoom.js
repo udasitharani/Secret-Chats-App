@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { Grid, CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import styles from "./CreateRoom.module.css";
 import SnackBar from "../SnackBar/SnackBar";
 import InputField from "../InputField/InputField";

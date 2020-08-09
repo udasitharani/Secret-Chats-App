@@ -1,13 +1,13 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import RoomDataContext from "../../contexts/RoomDataContext";
 import styles from "./MessageBubble.module.css";
 
 const MessageBubble = (props) => {
   const { roomData } = useContext(RoomDataContext);
   const className =
-    props.by == roomData["username"]
+    props.by === roomData["username"]
       ? styles.myBubble
-      : props.by == ""
+      : props.by === ""
       ? styles.globalBubble
       : styles.notMyBubble;
   const timestamp = new Date(props.timestamp);
@@ -18,9 +18,9 @@ const MessageBubble = (props) => {
     <div className={className}>
       <div
         className={
-          props.by == roomData["username"]
+          props.by === roomData["username"]
             ? styles.none
-            : props.by == ""
+            : props.by === ""
             ? styles.none
             : styles.sender
         }
@@ -28,7 +28,7 @@ const MessageBubble = (props) => {
         {props.by}
       </div>
       <span>{props.text}</span>
-      <div className={props.by == "" ? styles.none : styles.timestamp}>
+      <div className={props.by === "" ? styles.none : styles.timestamp}>
         {hours + ":" + minutes}
       </div>
     </div>

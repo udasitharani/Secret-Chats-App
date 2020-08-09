@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
-import { Grid } from "@material-ui/core";
 import AppHeader from "./Components/AppBar/AppBar";
 import "./App.css";
 import Home from "./Components/Home/Home";

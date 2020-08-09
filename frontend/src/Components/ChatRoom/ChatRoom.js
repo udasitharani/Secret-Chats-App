@@ -27,37 +27,28 @@ const ChatRoom = (props) => {
   let history = useHistory();
 
   const leaveRoom = async () => {
-    console.log("1. leave room");
     if (roomData["roomkey"]) {
-      console.log("2. Inside the if {}");
       const data = {
         roomkey: roomData["roomkey"],
         username: roomData["username"],
       };
-      console.log("3. Let's fetch('leaveeee').");
-      await fetch("http://127.0.0.1:8080/api/chat-room/leave", {
+      fetch("http://127.0.0.1:8080/api/chat-room/leave", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
-      console.log("4. fetch('leaveeee') left.");
       const roomname = roomData["roomname"];
       setSnackBarMessage("Left " + roomname + ".");
       setSnackBarSeverity("success");
       setShowSnackBar(true);
-      console.log("5. Set snackbar data.");
     }
-    console.log("6. Left the if.");
     setRoomData({});
     if (socket) {
-      console.log("7. Inside the socket.");
-      await socket.disconnect();
+      socket.disconnect();
     }
-    console.log("8. Pushing history.");
     history.push("/");
-    console.log("9. Pushed history.");
   };
 
   const sendMessage = () => {
@@ -79,10 +70,7 @@ const ChatRoom = (props) => {
       setSocket(newSocket);
       newSocket.emit("initialSetup", roomData["roomkey"]);
       newSocket.emit("getInitialMessageFlood");
-      newSocket.on("initialMessageFlood", (data) => {
-        console.log("initialMessageFlood");
-        setMessages([...messages, data]);
-      });
+
       newSocket.on("newMessage", (message) => {
         (async () => {
           await setMessages([...messages, ...message]);
@@ -92,11 +80,7 @@ const ChatRoom = (props) => {
       history.push("/join-room");
     }
     return () => {
-      (async () => {
-        console.log("start leaving...........");
-        leaveRoom();
-        console.log("leftttttttttttttttttt...........");
-      })();
+      leaveRoom();
     };
   }, []);
 

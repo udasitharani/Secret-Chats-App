@@ -52,16 +52,6 @@ io.on("connect", async (socket) => {
     });
   });
 
-  // socket.on("getInitialMessageFlood", async () => {
-  //   const messages = [];
-  //   const messagesCollectionRef = await messagesCollection.get();
-  //   messagesCollectionRef.forEach((messageDoc) => {
-  //     const message = { id: messageDoc.id, ...messageDoc.data() };
-  //     messages.push(message);
-  //   });
-  //   socket.emit("initialMessageFlood", messages);
-  // });
-
   socket.on("disconnect", () => {
     console.log("disconnected.");
   });

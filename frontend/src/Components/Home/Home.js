@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from "react";
-import { Grid } from "@material-ui/core";
 import LinkedButton from "../LinkedButton/LinkedButton";
 import styles from "./Home.module.css";
 import SnackBar from "../SnackBar/SnackBar";
