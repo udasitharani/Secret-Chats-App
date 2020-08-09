@@ -15,7 +15,7 @@ const Home = () => {
   } = useContext(SnackBarContext);
 
   useEffect(() => {
-    setHeaderTitle("Secrets");
+    setHeaderTitle("Binod Texting");
   }, []);
 
   return (

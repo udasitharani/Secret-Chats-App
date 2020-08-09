@@ -28,7 +28,7 @@ const CreateRoom = (props) => {
   } = useContext(SnackBarContext);
 
   useEffect(() => {
-    setHeaderTitle("Secrets");
+    setHeaderTitle("Binod Texting");
   });
 
   useEffect(() => {

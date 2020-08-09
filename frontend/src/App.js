@@ -11,7 +11,7 @@ import RoomDataContext from "./contexts/RoomDataContext";
 import SnackBarContext from "./contexts/SnackBarContext";
 
 const App = () => {
-  const [headerTitle, setHeaderTitle] = useState("Secrets");
+  const [headerTitle, setHeaderTitle] = useState("Binod Texting");
   const [roomData, setRoomData] = useState({});
   const [showSnackBar, setShowSnackBar] = useState(false);
   const [SnackBarSeverity, setSnackBarSeverity] = useState("success");
