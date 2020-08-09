@@ -7,4 +7,12 @@
   flex: 1 1 auto;
   background: #ffffff;
   overflow: auto;
+  max-height: 100vh;
+}
+
+.bottom {
+  position: relative;
+  height: 10px;
+  background: transparent;
+  top: 20%;
 }

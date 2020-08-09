@@ -69,9 +69,9 @@ const ChatRoom = (props) => {
       const newSocket = socketIOClient("http://127.0.0.1:8080");
       setSocket(newSocket);
       newSocket.emit("initialSetup", roomData["roomkey"]);
-      newSocket.emit("getInitialMessageFlood");
 
       newSocket.on("newMessage", (message) => {
+        document.querySelector("#bottom").scrollIntoView(true);
         (async () => {
           await setMessages([...messages, ...message]);
         })();
@@ -96,6 +96,7 @@ const ChatRoom = (props) => {
       >
         <div className={styles.messagesBody}>
           <MessagesBody messages={messages} />
+          <div id="bottom" className={styles.bottom} />
         </div>
         <ChatInput
           value={message}
