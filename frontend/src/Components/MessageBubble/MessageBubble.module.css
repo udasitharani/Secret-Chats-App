@@ -9,12 +9,21 @@
   margin: 2px 0;
 }
 
+.timestamp {
+  position: relative;
+
+  font-size: 8px;
+  text-align: end;
+  margin-top: 3px;
+  opacity: 0.7;
+}
+
 .myBubble {
   font-size: 16px;
   align-self: flex-end;
   background: #eeeeee;
   border-radius: 5px;
-  padding: 10px;
+  padding: 12px;
   position: relative;
   right: 20px;
   margin: 5px 0;
@@ -69,6 +78,11 @@
 @media only screen and (min-width: 600px) {
   .none {
     display: none;
+  }
+
+  .timestamp {
+    margin-top: 5px;
+    font-size: 10px;
   }
 
   .sender {

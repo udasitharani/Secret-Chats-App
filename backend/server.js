@@ -38,6 +38,7 @@ io.on("connect", async (socket) => {
         const messages = [];
         querySnapshot.forEach((messageDoc) => {
           const message = { id: messageDoc.id, ...messageDoc.data() };
+          message["timestamp"] = message["timestamp"].toDate();
           messages.push(message);
         });
         socket.emit("newMessage", messages);
