@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import { Grid } from "@material-ui/core";
@@ -30,6 +30,8 @@ const ChatRoom = (props) => {
   const [message, setMessage] = useState("");
   const [socket, setSocket] = useState();
   const [startVideoCall, setStartVideoCall] = useState(false);
+  const startVideoCallRef = useRef();
+  startVideoCallRef.current = startVideoCall;
   let history = useHistory();
 
   const leaveRoom = async () => {
@@ -101,13 +103,12 @@ const ChatRoom = (props) => {
       setShowVideoButton(true);
       setOnVideoButtonClick(() => {
         return () => {
-          console.log(startVideoCall);
-          if (startVideoCall) {
-            console.log("it was true");
-            setStartVideoCall(true);
-          } else {
-            console.log("it was false");
+          if (startVideoCallRef.current) {
             setStartVideoCall(false);
+            console.log(startVideoCallRef.current);
+          } else {
+            console.log(startVideoCallRef.current);
+            setStartVideoCall(true);
           }
         };
       });
@@ -119,7 +120,7 @@ const ChatRoom = (props) => {
     };
   }, []);
 
-  if (!startVideoCall) {
+  if (!startVideoCallRef.current) {
     return (
       <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
         <Grid
@@ -149,7 +150,6 @@ const ChatRoom = (props) => {
       </div>
     );
   } else {
-    console.log(startVideoCall);
     return (
       <div style={{ width: "100%", height: "100%", overflow: "auto" }}>
         <VideoCall socket={socket} />
